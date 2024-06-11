@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import 'dotenv/config'
 import { isAdmin, isTeacher, isUser } from './midleware';
-import { PORT } from './config';
+import { DB_PORT } from './config';
 
 import programsRoutes from './routes/programsRoutes';
 import ambientsRoutes from './routes/ambientsRoutes';
@@ -25,7 +25,7 @@ class Server{
     }
 
     config(): void{
-        this.app.set('port', PORT);
+        this.app.set('port', DB_PORT);
         this.app.use(morgan('dev'));
         this.app.use(cors({
             origin: 'https://frontend-sena-app.vercel.app'
@@ -47,7 +47,7 @@ class Server{
 
     start(): void{
         this.app.listen(this.app.get('port'),()=>{
-            console.log('Server on port', PORT)
+            console.log('Server on port', DB_PORT)
         });
     }
 }
