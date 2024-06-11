@@ -24,7 +24,6 @@ class Server{
 
     public app: Application;
 
-
     constructor(){
         this.app=express();
         this.config();

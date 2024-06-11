@@ -41,7 +41,6 @@ function isUser(req, res, next) {
             const token = generateToken(logUser);
             // Se le da un token con una duracion de 3h
             res.json({ token: token, user_type: 1 });
-            next();
         }
         else {
             try {
@@ -54,7 +53,6 @@ function isUser(req, res, next) {
                     teacherUser.user_type = 0;
                     const token = generateToken(teacherUser);
                     res.json({ token: token, user_type: 0 });
-                    next();
                 }
                 else {
                     //Si no exite devolver un error 404 - Usuario no encontrado
