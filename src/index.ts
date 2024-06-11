@@ -27,12 +27,7 @@ class Server{
     config(): void{
         this.app.set('port', DB_PORT);
         this.app.use(morgan('dev'));
-        this.app.use(cors({
-            origin: 'https://frontend-sena-app.vercel.app',
-            methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-            allowedHeaders: 'Content-Type, X-Auth-Token, Origin, Authorization',
-            credentials: true,
-        }));
+        this.app.use(cors());
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: false}));
     }   
