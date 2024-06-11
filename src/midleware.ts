@@ -8,14 +8,14 @@ const secretKey="$apr1$o46xadbi$mMunwZdccIJtOwYwCgbzg0";
 
 export async function isUser(req: Request, res: Response, next: NextFunction) {
     // Obtener el admin de la base de datos
-    const admin = await usersController.getUser(1);
-    if (admin == null || admin === undefined) {
+    const admin: userModel = await usersController.getUser(1) as userModel;
+    if (!admin) {
         return res.json({ mensaje: 'Admin no encontrado' });
     }
-
+    
     const adminUser: userModel = {
-        user_login: admin[0].user_login,
-        user_pwd: admin[0].user_pwd,
+        user_login: admin.user_login,
+        user_pwd: admin.user_pwd,
         user_type: 1
     }
     
@@ -38,7 +38,7 @@ export async function isUser(req: Request, res: Response, next: NextFunction) {
             //Traer el listado de usuarios de la base de datos
             const listUsers = await usersController.ListUsers();
             //Usando el .find sobre ese listado buscar si las credenciales existen
-            const teacherUser = listUsers.find((user: userModel)=> user.user_login === logUser.user_login && user.user_pwd === logUser.user_pwd);
+            const teacherUser = (listUsers as userModel[]).find((user: userModel)=> user.user_login === logUser.user_login && user.user_pwd === logUser.user_pwd);
             //Si existe entonces hacer el generateToken y devolverlo
             if(teacherUser){
                 teacherUser.user_type=0;

@@ -17,40 +17,43 @@ class ScheduleController {
     ListAllSchedules(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL listSchedulesAll()`;
-            const schedulesList = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, (err, rows, fields) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            res.json(schedulesList[0]);
+            try {
+                const [rows] = yield database_1.default.query(sql);
+                const schedulesList = Object.values(JSON.parse(JSON.stringify(rows)));
+                res.json(schedulesList[0]);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send('Error al listar todos los horarios');
+            }
         });
     }
     ListSchedulesPeriodTeacher(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL listSchedulesPeriodTeacher(?, ?)`;
-            const schedulesList = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, [req.params.Tid, req.params.Pid], (err, rows, fields) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            res.json(schedulesList[0]);
+            try {
+                const [rows] = yield database_1.default.query(sql, [req.params.Tid, req.params.Pid]);
+                const schedulesList = Object.values(JSON.parse(JSON.stringify(rows)));
+                res.json(schedulesList[0]);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send('Error al listar los horarios del periodo del profesor');
+            }
         });
     }
     getSchedule(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL getSchedule(?)`;
-            const schedule = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, [req.params.id], (err, rows, fields) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            res.json(schedule[0]);
+            try {
+                const [rows] = yield database_1.default.query(sql, [req.params.id]);
+                const schedule = Object.values(JSON.parse(JSON.stringify(rows)));
+                res.json(schedule[0]);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send('Error al obtener el horario');
+            }
         });
     }
     create(req, res) {

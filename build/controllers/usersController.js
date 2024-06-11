@@ -17,27 +17,29 @@ class UsersController {
     ListUsers() {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL listUsers()`;
-            const usersList = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, (err, rows) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            return usersList[0];
+            try {
+                const [rows] = yield database_1.default.query(sql);
+                const usersList = Object.values(JSON.parse(JSON.stringify(rows)));
+                return usersList[0];
+            }
+            catch (err) {
+                console.error(err);
+                throw new Error('Error al listar los usuarios');
+            }
         });
     }
     getUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL getUser(?)`;
-            const user = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, [id], (err, rows) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            return user[0];
+            try {
+                const [rows] = yield database_1.default.query(sql, [id]);
+                const user = Object.values(JSON.parse(JSON.stringify(rows)));
+                return user[0];
+            }
+            catch (err) {
+                console.error(err);
+                throw new Error('Error al obtener el usuario');
+            }
         });
     }
     create(user_login, user_pwd) {

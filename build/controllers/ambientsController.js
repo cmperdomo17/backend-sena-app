@@ -17,27 +17,29 @@ class AmbientController {
     ListAmbients(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL listAmbients()`;
-            const ambientsList = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, (err, rows, fields) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            res.json(ambientsList[0]);
+            try {
+                const [rows] = yield database_1.default.query(sql);
+                const ambientsList = Object.values(JSON.parse(JSON.stringify(rows)));
+                res.json(ambientsList[0]);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send('Error al listar los ambientes');
+            }
         });
     }
     getAmbient(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL getAmbient(?)`;
-            const ambient = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, [req.params.id], (err, rows, fields) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            res.json(ambient[0]);
+            try {
+                const [rows] = yield database_1.default.query(sql, [req.params.id]);
+                const ambient = Object.values(JSON.parse(JSON.stringify(rows)));
+                res.json(ambient[0]);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send('Error al obtener el ambiente');
+            }
         });
     }
     create(req, res) {

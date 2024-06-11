@@ -21,12 +21,12 @@ function isUser(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         // Obtener el admin de la base de datos
         const admin = yield usersController_1.default.getUser(1);
-        if (admin == null || admin === undefined) {
+        if (!admin) {
             return res.json({ mensaje: 'Admin no encontrado' });
         }
         const adminUser = {
-            user_login: admin[0].user_login,
-            user_pwd: admin[0].user_pwd,
+            user_login: admin.user_login,
+            user_pwd: admin.user_pwd,
             user_type: 1
         };
         const logUser = {

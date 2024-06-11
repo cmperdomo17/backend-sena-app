@@ -17,27 +17,29 @@ class TeacherController {
     ListTeachers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL listTeachers()`;
-            const teachersList = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, (err, rows) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            res.json(teachersList[0]);
+            try {
+                const [rows] = yield database_1.default.query(sql);
+                const teachersList = Object.values(JSON.parse(JSON.stringify(rows)));
+                res.json(teachersList[0]);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send('Error al listar los profesores');
+            }
         });
     }
     getTeacher(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL getTeacher(?)`;
-            const teacher = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, [req.params.id], (err, rows) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            res.json(teacher[0]);
+            try {
+                const [rows] = yield database_1.default.query(sql, [req.params.id]);
+                const teacher = Object.values(JSON.parse(JSON.stringify(rows)));
+                res.json(teacher[0]);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send('Error al obtener el profesor');
+            }
         });
     }
     create(req, res) {

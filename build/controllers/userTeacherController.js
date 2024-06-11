@@ -17,27 +17,29 @@ class UserTeacherController {
     getTeacherT(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL getTeacherByUserId(?)`;
-            const teacher = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, [req.body.user_id], (err, rows) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            res.json(teacher[0]);
+            try {
+                const [rows] = yield database_1.default.query(sql, [req.body.user_id]);
+                const teacher = Object.values(JSON.parse(JSON.stringify(rows)));
+                res.json(teacher[0]);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send('Error al obtener el profesor');
+            }
         });
     }
     ListSchedulesPeriodTeacherT(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const sql = `CALL listSchedulesPeriodTeacher(?, ?)`;
-            const schedulesList = yield new Promise((resolve, reject) => {
-                database_1.default.query(sql, [req.body.teacher_id, req.params.Pid], (err, rows, fields) => {
-                    if (err)
-                        reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-            });
-            res.json(schedulesList[0]);
+            try {
+                const [rows] = yield database_1.default.query(sql, [req.body.teacher_id, req.params.Pid]);
+                const schedulesList = Object.values(JSON.parse(JSON.stringify(rows)));
+                res.json(schedulesList[0]);
+            }
+            catch (err) {
+                console.error(err);
+                res.status(500).send('Error al listar los horarios del periodo del profesor');
+            }
         });
     }
     ListPeriodsT(req, res) {
