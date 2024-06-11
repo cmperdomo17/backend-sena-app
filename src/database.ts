@@ -6,7 +6,6 @@ const pool = createPool({
     user: keys.database.user,
     password: keys.database.password,
     database: keys.database.database,
-    connectTimeout: 10000,
 });
 
 pool
