@@ -28,7 +28,7 @@ class Server{
         this.app.set('port', PORT);
         this.app.use(morgan('dev'));
         this.app.use(cors({
-            origin: ['https://frontend-sena-app.vercel.app', 'http://localhost:4200']
+            origin: 'https://frontend-sena-app.vercel.app'
         }));
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: false}));
