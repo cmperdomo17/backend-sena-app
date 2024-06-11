@@ -14,9 +14,16 @@ import userRoutes from './routes/userRoutes';
 import scheduleRoutes from './routes/scheduleRoutes';
 import userTeacherRoutes from './routes/userTeacherRoutes';
 
+const corsOptions = {
+    origin: '*', 
+    credentials: true,     
+    optionSuccessStatus: 200,
+};
+
 class Server{
 
     public app: Application;
+
 
     constructor(){
         this.app=express();
@@ -27,7 +34,7 @@ class Server{
     config(): void{
         this.app.set('port', DB_PORT);
         this.app.use(morgan('dev'));
-        this.app.use(cors());
+        this.app.use(cors(corsOptions));
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: false}));
     }   
