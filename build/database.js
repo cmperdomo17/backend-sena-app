@@ -10,6 +10,7 @@ const pool = (0, promise_1.createPool)({
     user: keys_1.default.database.user,
     password: keys_1.default.database.password,
     database: keys_1.default.database.database,
+    port: keys_1.default.database.port,
 });
 pool
     .getConnection()

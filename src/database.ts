@@ -6,6 +6,7 @@ const pool = createPool({
     user: keys.database.user,
     password: keys.database.password,
     database: keys.database.database,
+    port: keys.database.port,
 });
 
 pool

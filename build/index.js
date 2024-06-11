@@ -24,9 +24,11 @@ class Server {
         this.routes();
     }
     config() {
-        this.app.set('port', config_1.PORT);
+        this.app.set('port', config_1.DB_PORT);
         this.app.use((0, morgan_1.default)('dev'));
-        this.app.use((0, cors_1.default)());
+        this.app.use((0, cors_1.default)({
+            origin: 'https://frontend-sena-app.vercel.app'
+        }));
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: false }));
     }
@@ -42,7 +44,7 @@ class Server {
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
-            console.log('Server on port', config_1.PORT);
+            console.log('Server on port', config_1.DB_PORT);
         });
     }
 }
