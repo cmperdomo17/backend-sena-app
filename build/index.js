@@ -17,11 +17,6 @@ const competenceRoutes_1 = __importDefault(require("./routes/competenceRoutes"))
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const scheduleRoutes_1 = __importDefault(require("./routes/scheduleRoutes"));
 const userTeacherRoutes_1 = __importDefault(require("./routes/userTeacherRoutes"));
-const corsOptions = {
-    origin: '*',
-    credentials: true,
-    optionSuccessStatus: 200,
-};
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -31,7 +26,9 @@ class Server {
     config() {
         this.app.set('port', config_1.DB_PORT);
         this.app.use((0, morgan_1.default)('dev'));
-        this.app.use((0, cors_1.default)(corsOptions));
+        this.app.use((0, cors_1.default)({
+            origin: 'https://frontend-sena-app.vercel.app'
+        }));
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: false }));
     }
