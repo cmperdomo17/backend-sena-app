@@ -4,7 +4,6 @@ import cors from 'cors';
 import 'dotenv/config'
 import { isAdmin, isTeacher, isUser } from './midleware';
 import { DB_PORT } from './config';
-
 import programsRoutes from './routes/programsRoutes';
 import ambientsRoutes from './routes/ambientsRoutes';
 import teachersRoutes from './routes/teachersRoutes';
@@ -13,6 +12,8 @@ import competenceRoutes from './routes/competenceRoutes';
 import userRoutes from './routes/userRoutes';
 import scheduleRoutes from './routes/scheduleRoutes';
 import userTeacherRoutes from './routes/userTeacherRoutes';
+
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://frontend-sena-app.vercel.app';
 
 class Server{
 
@@ -28,7 +29,7 @@ class Server{
         this.app.set('port', DB_PORT);
         this.app.use(morgan('dev'));
         this.app.use(cors({
-            origin: 'https://frontend-sena-app.vercel.app',
+            origin: FRONTEND_URL,
             methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
             allowedHeaders: 'Content-Type, X-Auth-Token, Origin, Authorization',
             credentials: true,
