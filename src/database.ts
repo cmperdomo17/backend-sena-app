@@ -1,17 +1,21 @@
 import { createPool } from 'mysql2/promise';
 import keys from './keys';
 
-const pool = createPool(keys.database);
+const pool = createPool({
+    host: keys.database.host,
+    user: keys.database.user,
+    password: keys.database.password,
+    database: keys.database.database,
+});
 
-(async () => {
-    try {
-        const connection = await pool.getConnection(); 
+pool
+    .getConnection()
+    .then((connection) => {
         console.log('DB is connected');
         connection.release(); 
-    } catch (error) {
-        console.error('Error connecting to the database:', error);
-        process.exit(1); 
-    }
-})();
+    })
+    .catch((err) => {
+        console.error('Error connecting to database: ', err);
+    });
 
 export default pool;
