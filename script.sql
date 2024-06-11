@@ -1,15 +1,3 @@
-/*==============================================================*/
-/* DBMS name:      MySQL 5.0                                    */
-/* Created on:     4/27/2024 5:02:21 PM                         */
-/*==============================================================*/
-
-/*ALTER USER 'root'@'localhost' identified with mysql_native_password by 'PASSWORD';*/
-
-drop database if exists sena_db;
-
-create database sena_db;
-
-use sena_db;
 
 /*==============================================================*/
 /* Table: ambiente                                              */
