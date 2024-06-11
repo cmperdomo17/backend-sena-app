@@ -29,8 +29,7 @@ class Server{
         this.app.use(morgan('dev'));
         this.app.use(cors({
             origin: 'https://frontend-sena-app.vercel.app',
-            credentials: true,
-            methods: ['GET', 'POST', 'PUT', 'DELETE']
+            credentials: false,
         }));
         this.app.use(express.json());
         this.app.use(express.urlencoded({extended: false}));
