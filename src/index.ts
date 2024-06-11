@@ -13,8 +13,6 @@ import userRoutes from './routes/userRoutes';
 import scheduleRoutes from './routes/scheduleRoutes';
 import userTeacherRoutes from './routes/userTeacherRoutes';
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'https://frontend-sena-app.vercel.app';
-
 class Server{
 
     public app: Application;
@@ -29,7 +27,7 @@ class Server{
         this.app.set('port', DB_PORT);
         this.app.use(morgan('dev'));
         this.app.use(cors({
-            origin: FRONTEND_URL,
+            origin: 'https://frontend-sena-app.vercel.app/',
             methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
             allowedHeaders: 'Content-Type, X-Auth-Token, Origin, Authorization',
             credentials: true,
