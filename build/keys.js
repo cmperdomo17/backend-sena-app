@@ -6,6 +6,7 @@ exports.default = {
         host: config_1.DB_HOST,
         user: config_1.DB_USER,
         password: config_1.DB_PASSWORD,
-        database: config_1.DB_NAME
+        database: config_1.DB_NAME,
+        port: config_1.DB_PORT
     }
 };
