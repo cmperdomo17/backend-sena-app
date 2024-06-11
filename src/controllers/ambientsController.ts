@@ -3,28 +3,28 @@ import {Request, Response } from 'express';
 import pool from '../database';
 
 class AmbientController{
-    public async ListAmbients (req: Request,res: Response){
+    public async ListAmbients (req: Request, res: Response){
         const sql=`CALL listAmbients()`;
-        const ambientsList=await new Promise<any>((resolve, reject) => {
-            pool.query(sql,
-                (err: any, rows: any, fields: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(ambientsList[0]);
+        try {
+            const [rows] = await pool.query(sql);
+            const ambientsList = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(ambientsList[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al listar los ambientes');
+        }
     }
 
     public async getAmbient (req: Request,res: Response){
         const sql=`CALL getAmbient(?)`;
-        const ambient=await new Promise<any>((resolve, reject) => {
-            pool.query(sql, [req.params.id],
-                (err: any, rows: any, fields: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(ambient[0]);
+        try {
+            const [rows] = await pool.query(sql, [req.params.id]);
+            const ambient = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(ambient[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al obtener el ambiente');
+        }
     }
 
     public async create (req: Request,res: Response){

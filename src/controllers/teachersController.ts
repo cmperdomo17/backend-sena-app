@@ -5,26 +5,26 @@ import pool from '../database';
 class TeacherController{
     public async ListTeachers (req: Request,res: Response){
         const sql=`CALL listTeachers()`;
-        const teachersList=await new Promise<any>((resolve, reject) => {
-            pool.query(sql,
-                (err: any, rows: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(teachersList[0]);
+        try {
+            const [rows] = await pool.query(sql);
+            const teachersList = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(teachersList[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al listar los profesores');
+        }
     }
-
+    
     public async getTeacher (req: Request,res: Response){
         const sql=`CALL getTeacher(?)`;
-        const teacher=await new Promise<any>((resolve, reject) => {
-            pool.query(sql, [req.params.id],
-                (err: any, rows: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(teacher[0]);
+        try {
+            const [rows] = await pool.query(sql, [req.params.id]);
+            const teacher = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(teacher[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al obtener el profesor');
+        }
     }
 
     public async create (req: Request,res: Response){

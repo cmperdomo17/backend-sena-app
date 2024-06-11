@@ -3,26 +3,26 @@ import pool from '../database';
 class UsersController{
     public async ListUsers (){
         const sql=`CALL listUsers()`;
-        const usersList=await new Promise<any>((resolve, reject) => {
-            pool.query(sql,
-                (err: any, rows: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        return usersList[0];
+        try {
+            const [rows] = await pool.query(sql);
+            const usersList = Object.values(JSON.parse(JSON.stringify(rows)));
+            return usersList[0];
+        } catch (err) {
+            console.error(err);
+            throw new Error('Error al listar los usuarios');
+        }
     }
-
+    
     public async getUser (id: number){
         const sql=`CALL getUser(?)`;
-        const user=await new Promise<any>((resolve, reject) => {
-            pool.query(sql, [id],
-                (err: any, rows: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        return user[0];
+        try {
+            const [rows] = await pool.query(sql, [id]);
+            const user = Object.values(JSON.parse(JSON.stringify(rows)));
+            return user[0];
+        } catch (err) {
+            console.error(err);
+            throw new Error('Error al obtener el usuario');
+        }
     }
 
     public async create (user_login: string, user_pwd: string){

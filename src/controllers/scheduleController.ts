@@ -5,38 +5,38 @@ import pool from '../database';
 class ScheduleController{
     public async ListAllSchedules (req: Request,res: Response){
         const sql=`CALL listSchedulesAll()`;
-        const schedulesList=await new Promise<any>((resolve, reject) => {
-            pool.query(sql,
-                (err: any, rows: any, fields: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(schedulesList[0]);
+        try {
+            const [rows] = await pool.query(sql);
+            const schedulesList = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(schedulesList[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al listar todos los horarios');
+        }
     }
-
+    
     public async ListSchedulesPeriodTeacher (req: Request,res: Response){
         const sql=`CALL listSchedulesPeriodTeacher(?, ?)`;
-        const schedulesList=await new Promise<any>((resolve, reject) => {
-            pool.query(sql, [req.params.Tid, req.params.Pid],
-                (err: any, rows: any, fields: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(schedulesList[0]);
+        try {
+            const [rows] = await pool.query(sql, [req.params.Tid, req.params.Pid]);
+            const schedulesList = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(schedulesList[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al listar los horarios del periodo del profesor');
+        }
     }
 
     public async getSchedule (req: Request,res: Response){
         const sql=`CALL getSchedule(?)`;
-        const schedule=await new Promise<any>((resolve, reject) => {
-            pool.query(sql, [req.params.id],
-                (err: any, rows: any, fields: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(schedule[0]);
+        try {
+            const [rows] = await pool.query(sql, [req.params.id]);
+            const schedule = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(schedule[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al obtener el horario');
+        }
     }
 
     public async create (req: Request,res: Response){

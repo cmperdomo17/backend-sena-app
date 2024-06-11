@@ -5,26 +5,26 @@ import pool from '../database';
 class CompetenceController{
     public async ListCompetencies (req: Request,res: Response){
         const sql=`CALL listCompetencies()`;
-        const competenciesList=await new Promise<any>((resolve, reject) => {
-            pool.query(sql,
-                (err: any, rows: any, fields: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(competenciesList[0]);
+        try {
+            const [rows] = await pool.query(sql);
+            const competenciesList = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(competenciesList[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al listar las competencias');
+        }
     }
-
+    
     public async getCompetence (req: Request,res: Response){
         const sql=`CALL getCompetence(?, ?)`;
-        const competence=await new Promise<any>((resolve, reject) => {
-            pool.query(sql, [req.params.id, req.params.type],
-                (err: any, rows: any, fields: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(competence[0]);
+        try {
+            const [rows] = await pool.query(sql, [req.params.id, req.params.type]);
+            const competence = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(competence[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al obtener la competencia');
+        }
     }
 
     public async create (req: Request,res: Response){

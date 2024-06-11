@@ -5,26 +5,26 @@ import pool from '../database';
 class ProgramController{
     public async ListPrograms (req: Request,res: Response){
         const sql=`CALL listPrograms()`;
-        const programsList=await new Promise<any>((resolve, reject) => {
-            pool.query(sql,
-                (err: any, rows: any, fields: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(programsList[0]);
+        try {
+            const [rows] = await pool.query(sql);
+            const programsList = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(programsList[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al listar los programas');
+        }
     }
-
+    
     public async getProgram (req: Request,res: Response){
         const sql=`CALL getProgram(?)`;
-        const program=await new Promise<any>((resolve, reject) => {
-            pool.query(sql, [req.params.id],
-                (err: any, rows: any, fields: any) => {
-                    if (err) reject(err); // En caso de error, resolvemos la Promise con error
-                    resolve(Object.values(JSON.parse(JSON.stringify(rows)))); // Si no, resolvemos con el resultado
-                });
-        });
-        res.json(program[0]);
+        try {
+            const [rows] = await pool.query(sql, [req.params.id]);
+            const program = Object.values(JSON.parse(JSON.stringify(rows)));
+            res.json(program[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al obtener el programa');
+        }
     }
 
     public async create (req: Request,res: Response){
